@@ -23,7 +23,7 @@ const Plan = () => {
       var users = await getUsers();
 
       var userOptions = [];
-      users.map((u) => userOptions.push({ label: u.name, value: u.userId }));
+      users.map((u) => userOptions.push({ label: u.name, value: u.userId, key: u.userId }));
 
       setUsers(userOptions);
       setProcedures(procedures);
