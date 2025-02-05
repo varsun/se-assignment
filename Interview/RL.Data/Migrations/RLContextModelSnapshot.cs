@@ -850,6 +850,31 @@ namespace RL.Data.Migrations
                 {
                     b.Navigation("PlanProcedures");
                 });
+
+
+            modelBuilder.Entity("RL.Data.DataModels.ProcedureUser", b =>
+            {
+                b.HasOne("RL.Data.DataModels.Procedure", "Procedure")
+                    .WithMany("ProcedureUsers")
+                    .HasForeignKey("ProcedureId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("RL.Data.DataModels.User", "User")
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("Procedure");
+
+                b.Navigation("User");
+            });
+
+            modelBuilder.Entity("RL.Data.DataModels.Procedure", b =>
+            {
+                b.Navigation("ProcedureUsers");
+            });
 #pragma warning restore 612, 618
         }
     }

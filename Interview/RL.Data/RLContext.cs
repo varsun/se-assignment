@@ -10,6 +10,8 @@ public class RLContext : DbContext
     public DbSet<Procedure> Procedures { get; set; }
     public DbSet<User> Users { get; set; }
 
+    public DbSet<ProcedureUser> ProcedureUsers { get; set; }
+
     public RLContext() { }
     public RLContext(DbContextOptions<RLContext> options) : base(options) { }
 
@@ -23,6 +25,41 @@ public class RLContext : DbContext
             typeBuilder.HasOne(pp => pp.Plan).WithMany(p => p.PlanProcedures);
             typeBuilder.HasOne(pp => pp.Procedure).WithMany();
         });
+
+
+        builder.Entity<ProcedureUser>(typeBuilder =>
+        {
+            typeBuilder.HasKey(pp => new { pp.ProcedureId, pp.UserId });
+            typeBuilder.HasOne(pp => pp.Procedure).WithMany(p => p.ProcedureUsers);
+            typeBuilder.HasOne(pp => pp.User).WithMany();
+        });
+
+        //builder.Entity<ProcedureUser>(typeBuilder =>
+        //{
+        //    typeBuilder.HasKey(pp => new { pp.ProcedureId, pp.UserId });
+
+        //    typeBuilder.HasOne(pp => pp.Procedure)
+        //        .WithMany(p => p.ProcedureUsers)
+        //        .HasForeignKey(pp => pp.ProcedureId); // Ensure foreign key mapping
+
+        //    typeBuilder.HasOne(pp => pp.User)
+        //        .WithMany()
+        //        .HasForeignKey(pp => pp.UserId); // Ensure foreign key mapping
+        //});
+
+        //builder.Entity<ProcedureUser>(typeBuilder =>
+        //{
+        //    typeBuilder.HasKey(pp => new { pp.ProcedureId, pp.UserId });
+
+        //    // Configure relationships with navigation properties
+        //    typeBuilder.HasOne(pp => pp.Procedure)
+        //               .WithMany(p => p.ProcedureUsers)
+        //               .HasForeignKey(pp => pp.ProcedureId);
+
+        //    typeBuilder.HasOne(pp => pp.User)
+        //               .WithMany(u => u.ProcedureUsers) // Add navigation property in User entity
+        //               .HasForeignKey(pp => pp.UserId);
+        //});
 
         //Add procedure Seed Data
         var seedData = File.ReadAllLines(Path.Combine(AppContext.BaseDirectory, "ProcedureSeedData.csv"));
@@ -66,6 +103,8 @@ public class RLContext : DbContext
                 }
             });
         });
+
+        
     }
 
 
